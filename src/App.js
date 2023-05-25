@@ -31,6 +31,7 @@ function App() {
     console.log(dataIndex, val);
     setOutputData([...outputData, {'index': dataIndex, 'label': val}]);
     console.log(outputData);
+    console.log(URL);
     axios.post(`${URL}/annotate`, {'data': outputData}).then(res => {
       if (res.status == 200) {
         console.log("Posted data successfully");
