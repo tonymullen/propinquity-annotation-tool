@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     console.log("Getting data...")
     console.log(`URL: ${URL}/annotate`)
-    axios.get(`${URL}/annotate`).then(res => {
+    axios.get(`/annotate`).then(res => {
       console.log("Got data!");
       console.log(res.data);
       setOutputData(res.data);
@@ -31,7 +31,6 @@ function App() {
     console.log(dataIndex, val);
     setOutputData([...outputData, {'index': dataIndex, 'label': val}]);
     console.log(outputData);
-    console.log(URL);
     axios.post(`${URL}/annotate`, {'data': outputData}).then(res => {
       if (res.status == 200) {
         console.log("Posted data successfully");
