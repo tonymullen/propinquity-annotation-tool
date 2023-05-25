@@ -8,7 +8,7 @@ import raw_data from './data/30_022_128_1_0_Questions.json';
 
 // const URL = 'http://10.0.0.100:3000';
 
-const URL = 'ec2-54-191-250-178.us-west-2.compute.amazonaws.com'
+const URL = 'ec2-54-212-38-167.us-west-2.compute.amazonaws.com'
 
 function App() {
 
