@@ -1,7 +1,8 @@
 const http = require('http');
 const fs = require('fs');
 const HTML_DIR = './build';
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
+const PORT = 80;
 const OUTPUT_FILE= './output/30_022_128_1_0_Questions_annot.json';
 
 const server = http.createServer(onRequest);
