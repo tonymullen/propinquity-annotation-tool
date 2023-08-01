@@ -46,10 +46,11 @@ async function addAnnotation(annotData) {
         //     'testerooni',
         //     data
         // )
+        console.log(data);
         const annotationsResponse = await AnnotationsDAO.addAnnotation(
             data[data.length-1]['annotator'],
-            'my_datafile',
-            data[data.length-1]['index'],
+            data[data.length-1]['doc_index'],
+            data[data.length-1]['line_index'],
             data[data.length-1]['label']
         )
   
@@ -61,9 +62,8 @@ async function addAnnotation(annotData) {
         
         const updateLineIndex = await AnnotatorsDAO.updateProgress(
             data[data.length-1]['annotator'],
-            data[data.length-1]['index']+1
+            data[data.length-1]['line_index']+1
         );
-        
       } 
          catch(e) {
             console.log(e);
@@ -103,7 +103,7 @@ async function onRequest(request, response) {
             request.on('end', function() {
                 // Write to DB
                 addAnnotation(body);
-                response.writeHead(200);
+                response.writeHead(200, { 'Content-Type': 'application/json' });
                 response.end();
             });
         } else if ('/progress' == request.url) { 
@@ -127,7 +127,7 @@ async function onRequest(request, response) {
         if (capture= request.url.match(/\/progress\/(\w+)$/)) { 
                 const annotator = capture[1];
                 const progress = await getAnnotatorProgress(annotator);
-                response.writeHead(200);
+                //response.writeHead(200);
                 response.writeHead(200, { 'Content-Type': 'application/json' });
                 response.end(JSON.stringify(progress));
         }
