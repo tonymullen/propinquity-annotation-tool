@@ -41,29 +41,34 @@ async function addAnnotation(annotData) {
     // console.log("Writing to db data")
     // console.log(annotData)
     data = JSON.parse(annotData).data;
+    console.log(data);
     try {
         // const annotationsResponse = await AnnotationsDAO.updateAnnotations(
         //     'testerooni',
         //     data
         // )
         console.log(data);
-        const annotationsResponse = await AnnotationsDAO.addAnnotation(
-            data[data.length-1]['annotator'],
-            data[data.length-1]['doc_index'],
-            data[data.length-1]['line_index'],
-            data[data.length-1]['label']
-        )
-  
-        var { error } = annotationsResponse
-        if (error) {
-            console.log(error);
-          // res.status(500).json({ error });
-        }
-        
-        const updateLineIndex = await AnnotatorsDAO.updateProgress(
-            data[data.length-1]['annotator'],
-            data[data.length-1]['line_index']+1
-        );
+        if (Object.keys(data).length > 0) {
+            const annotationsResponse = await AnnotationsDAO.addAnnotation(
+                // data[data.length-1]['annotator'],
+                // data[data.length-1]['doc_index'],
+                // data[data.length-1]['line_index'],
+                // data[data.length-1]['label']
+                data['annotator'],
+                data['doc_index'],
+                data['line_index'],
+                data['label']
+            )
+            var { error } = annotationsResponse
+            if (error) {
+                console.log(error);
+              // res.status(500).json({ error });
+            }
+            const updateLineIndex = await AnnotatorsDAO.updateProgress(
+                data['annotator'],
+                data['line_index']+1
+            );
+        }     
       } 
          catch(e) {
             console.log(e);
@@ -73,6 +78,8 @@ async function addAnnotation(annotData) {
 
 
 async function getAnnotatorProgress(annot_name) {
+    console.log("annotator name:")
+    console.log(annot_name);
     try {
         const annotatorProgressResponse = await AnnotatorsDAO.getAnnotatorProgress(
             annot_name
@@ -126,6 +133,8 @@ async function onRequest(request, response) {
         } 
         if (capture= request.url.match(/\/progress\/(\w+)$/)) { 
                 const annotator = capture[1];
+                console.log("Annotator name from url:")
+                console.log(annotator);
                 const progress = await getAnnotatorProgress(annotator);
                 //response.writeHead(200);
                 response.writeHead(200, { 'Content-Type': 'application/json' });

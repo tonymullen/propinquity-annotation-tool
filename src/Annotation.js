@@ -11,7 +11,8 @@ const URL = 'http://10.0.0.100:8080';
 
 function Annotation({ dataFiles }) {
 
-  const [outputData, setOutputData] = useState([]);
+  // const [outputData, setOutputData] = useState([]);
+  const [outputData, setOutputData] = useState({});
   const [dataLineIndex, setDataLineIndex] = useState(0);
   const [dataDocIndex, setDataDocIndex] = useState(0);
   const [annotator, setAnnotator] = useState(null);
@@ -44,12 +45,16 @@ function Annotation({ dataFiles }) {
   }, [dataLineIndex]);
 
   useEffect(() => {
-    if (outputData.length == 0) {
+    //if (outputData.length == 0) {
+    console.log("This is empty?")
+    console.log(outputData);
+    if (Object.keys(outputData).length === 0) {
       return;
     }
     axios.post(`/annotate`, {'data': outputData}).then(res => {
       if (res.status == 200) {
         setTimeout(() => {
+          console.log("Shoudl this be happening?")
           axios.get(`/progress/${annotator}`).then(res => {
             if (res.status == 200) {
               setDataLineIndex(res.data.current_line_ind);
@@ -67,7 +72,7 @@ function Annotation({ dataFiles }) {
 
 
   function annotate(val) {
-    setOutputData([...outputData, 
+    setOutputData(//[...outputData, 
       {
         'annotator': annotator,
         'line_index': dataLineIndex,
@@ -75,7 +80,7 @@ function Annotation({ dataFiles }) {
         'text': raw_data[dataLineIndex]['dialog'],
         'label': val
       }
-    ]);
+    );
 
   }
 
