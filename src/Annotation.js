@@ -9,8 +9,6 @@ import dataFileList from './data/dataFileList.json';
 
 // const URL = 'http://10.0.0.100:8080';
 
-export const runtime = 'edge';
-
 function Annotation({ dataFiles }) {
 
   // const [outputData, setOutputData] = useState([]);
