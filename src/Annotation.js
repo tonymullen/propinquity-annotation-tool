@@ -7,7 +7,7 @@ import './App.css';
 import users from './data/userlist.json';
 import dataFileList from './data/dataFileList.json';
 
-const URL = 'http://10.0.0.100:8080';
+// const URL = 'http://10.0.0.100:8080';
 
 function Annotation({ dataFiles }) {
 
