@@ -29,13 +29,14 @@ class AnnotatorsDAO {
     }
   }
 
-  static async updateProgress(annotator, lineIndex) {
+  static async updateProgress(annotator, lineIndex, docIndex) {
     console.log("Updating progress")
     console.log(lineIndex)
     try {
       const updateResponse = await annotatorsCollection.updateOne(
         { annotator_name: annotator },
-        { $set: { "progress.current_line_ind": lineIndex }},
+        { $set: { "progress.current_line_ind": lineIndex,
+                  "progress.current_doc_ind": docIndex }},
         { upsert: true }
       )
       return updateResponse

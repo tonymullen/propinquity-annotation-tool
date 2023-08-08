@@ -13,8 +13,8 @@ function Annotation({ dataFiles }) {
 
   // const [outputData, setOutputData] = useState([]);
   const [outputData, setOutputData] = useState({});
-  const [dataLineIndex, setDataLineIndex] = useState(0);
-  const [dataDocIndex, setDataDocIndex] = useState(0);
+  const [dataLineIndex, setDataLineIndex] = useState(-1);
+  const [dataDocIndex, setDataDocIndex] = useState(-1);
   const [annotator, setAnnotator] = useState(null);
   const [raw_data, setRawData] = useState(null);
 
@@ -52,13 +52,14 @@ function Annotation({ dataFiles }) {
       return;
     }
     axios.post(`/annotate`, {'data': outputData}).then(res => {
+      console.log("Line index:", dataLineIndex)
+      console.log("Length of raw_data: ", raw_data.length)
       if (res.status == 200) {
         setTimeout(() => {
-          console.log("Shoudl this be happening?")
           axios.get(`/progress/${annotator}`).then(res => {
             if (res.status == 200) {
               setDataLineIndex(res.data.current_line_ind);
-              setDataDocIndex(res.data.current_doc_ind);
+              setDataDocIndex(res.data.current_doc_ind); 
             } else {
               alert("Error getting progress, please open a new tab and try again.")
             }
@@ -77,8 +78,10 @@ function Annotation({ dataFiles }) {
         'annotator': annotator,
         'line_index': dataLineIndex,
         'doc_index': dataDocIndex,
+        'doc_name': dataFileList[dataDocIndex],
         'text': raw_data[dataLineIndex]['dialog'],
-        'label': val
+        'label': val,
+        'needs_doc_increment': !(dataLineIndex < raw_data.length-1)
       }
     );
 

@@ -31,13 +31,14 @@ class AnnotationsDAO {
   }
 
 
-  static async addAnnotation(userId, data_file, index, annotation) {
+  static async addAnnotation(userId, data_file, index, annotation, text) {
     try {
       const reviewDoc = {
         annotator: userId,
         data_file: data_file,
         index: index,
-        annotation: annotation
+        annotation: annotation,
+        text: text
       }
       return await annotationsCollection.insertOne(reviewDoc);
     } catch(e) {

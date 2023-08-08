@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 80;
 const OUTPUT_FILE= './output/13_017_112_out-7_22_23_test_annot.json';
 
 const client = new mongodb.MongoClient(
-    `mongodb://127.0.0.1:27017/${process.env.ANNOTATIONS_COLLECTION}`
+    `${process.env.ANNOTATIONS_DB}/${process.env.ANNOTATIONS_COLLECTION}`
 );
 
 const server = http.createServer(onRequest);
@@ -41,7 +41,6 @@ async function addAnnotation(annotData) {
     // console.log("Writing to db data")
     // console.log(annotData)
     data = JSON.parse(annotData).data;
-    console.log(data);
     try {
         // const annotationsResponse = await AnnotationsDAO.updateAnnotations(
         //     'testerooni',
@@ -57,16 +56,29 @@ async function addAnnotation(annotData) {
                 data['annotator'],
                 data['doc_index'],
                 data['line_index'],
-                data['label']
+                data['label'],
+                data['text']
             )
             var { error } = annotationsResponse
             if (error) {
                 console.log(error);
               // res.status(500).json({ error });
             }
+            let line_index;
+            let doc_index;
+            if (data['needs_doc_increment']) {
+                line_index = 0;
+                doc_index = data['doc_index']+1;
+            } else {
+                line_index = data['line_index']+1;
+                doc_index = data['doc_index'];
+            }
+        
             const updateLineIndex = await AnnotatorsDAO.updateProgress(
                 data['annotator'],
-                data['line_index']+1
+                // data['line_index']+1
+                line_index,
+                doc_index
             );
         }     
       } 
